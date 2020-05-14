@@ -1,17 +1,16 @@
 #!/bin/sh
 
 # Thanks https://github.com/davidpaulos/XbpsUI for this template.
-# kiss-ui expect "community" to be at /var/db/kiss/community/community".
 
 # Set /path/to/community.
 export community="/var/db/kiss/community/community"
 
 # Set /path/to/personal/repo.
-export first_custom_path="/home/claudia/repos/kiss-games"
-export first_custom_name="kiss-games"
+export first_custom_path=
+export first_custom_name="-"
 
-export second_custom_path="/home/claudia/repos/mywayland/wayland"
-export second_custom_name="mywayland"
+export second_custom_path=
+export second_custom_name="-"
 
 export third_custom_path=
 export third_custom_name="-"
