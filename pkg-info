@@ -44,13 +44,13 @@ echo
 echo -e "\033[1m"kiss search":\033[0m"
 echo "$available"
 echo
-# Display size of pkg.
-echo -e "\033[1m"kiss-size":\033[0m"
-kiss-size "$1" | tail -1
-echo
 # Display maintainer of pkg.
 echo -e "\033[1m"kiss-maintainer":\033[0m"
 kiss-maintainer "$1" | tail -1
+echo
+# Display size of pkg.
+echo -e "\033[1m"kiss-size":\033[0m"
+kiss-size "$1" | tail -1
 echo
 # Display revdepends of pkg.
 echo -e "\033[1m"kiss-revdepends":\033[0m"
