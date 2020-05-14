@@ -1,4 +1,4 @@
 # kiss-ui
-fronted on top of the kiss package manager
+Needs fzf.
 
 ![screen](screenshot.png)
