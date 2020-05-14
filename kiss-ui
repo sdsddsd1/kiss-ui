@@ -1,4 +1,5 @@
 #!/bin/sh
+#A frontend for kiss
 
 # Thanks https://github.com/davidpaulos/XbpsUI for this template.
 
