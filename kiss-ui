@@ -303,56 +303,56 @@ echo
         1|update )
             update                                                                 
             echo
-            echo -e " \e[41m System updated. To return to kiss-ui press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             # wait for input, e.g. by pressing ENTER:
             read
             ;;
         2|orphans )
             orphans
             echo
-            echo -e " \e[41m System maintenance finished. To return to kiss-ui press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         3|rebuild )
             rebuild
             echo
-            echo -e " \e[41m Package installation finished. To return to kiss-ui press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         4|repo )
             repo
             echo
-            echo -e " \e[41m Package(s) purged. To return to kiss-ui press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         5|community )
             community
             echo
-            echo -e " \e[41m Package(s) held. To return to kiss-ui press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         6|custom1 )
             custom1
             echo
-            echo -e " \e[41m Package(s) unheld. To return to kiss-uI press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         7|custom2 )
             custom2
             echo
-            echo -e " \e[41m Package(s) unheld. To return to kiss-uI press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         8|custom3 )
             custom3
             echo
-            echo -e " \e[41m Package(s) unheld. To return to kiss-uI press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         9|custom4 )
             custom4
             echo
-            echo -e " \e[41m Package(s) unheld. To return to kiss-uI press ENTER \e[0m"
+            echo -e " \e[41m Press ENTER to continue \e[0m"
             read
             ;;
         0|q|quit|$'\e'|$'\e'$'\e' )
