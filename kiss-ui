@@ -1,249 +1,47 @@
 #!/bin/sh
-#A frontend for kiss
+# A frontend for kiss
 
 # Thanks https://github.com/davidpaulos/XbpsUI for this template.
 
-# Set /path/to/community.
-export community="/var/db/kiss/community/community"
-
-# Set /path/to/personal/repo.
-export first_custom_path=
-export first_custom_name="-"
-
-export second_custom_path=
-export second_custom_name="-"
-
-export third_custom_path=
-export third_custom_name="-"
-
-export fourth_custom_path=
-export fourth_custom_name="-"
-
-function update
-{
-		#command to update de system
-		kiss update
+update () {
+        # Command to update the system
+        kiss update
 }
 
-function rebuild
-{
-	#declaration of local variables 
-	local pkg
-	local argument_input	
-	
-	#selecting of packages to install
-	#flags multi to be able to pick multiple packages
-	#exact to match exact match
-	#no sort self explanatory
-	#cycle to enable cycle scroll
-	#reverse to set orientation to reverse
-	#margin for margins
-	#inline info to display info inline
-	#preview to show the package description 
-	#header and prompt to give info for people to know how to do stuff
-	pkg="$( kiss list | fzf -i --multi --exact --no-sort --select-1 --query="$argument_input" \
+rebuild () {
+    # Declaration of local variables
+    local pkg
+    local argument_input
+
+    # Selection of packages to install
+    # Flags:
+        # Multi to be able to pick up multiple packages
+        # Exact to match exact match
+        # Cycle to enable cycle scroll
+        # Preview to show the package description
+        # Header and prompt for instructions
+
+    pkg="$(kiss list | fzf -i --multi --exact --no-sort --select-1 --query="$argument_input" \
                     --cycle --reverse --margin="4%,1%,1%,2%" \
                     --inline-info \
                     --preview 'pkg-info {1} '\
                     --preview-window=right:55%:wrap \
-                    --header="TAB key to (un)select. ENTER to rebuild and install. ESC to quit." \
-                    --prompt="filter> " | awk '{print $1}'
-)"
+                    --header="TAB to (un)select. ENTER to rebuild and install. ESC to quit." \
+                    --prompt="filter> " | awk '{ print $1 }'
+        )"
 
-        pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
+        pkg="$(echo "$pkg" | paste -sd " ")"
+
+        if [ -n "$pkg" ]; then
             clear
-            kiss b $pkg && kiss i $pkg
-            fi
+            kiss b "$pkg" && kiss i "$pkg"
+        fi
 }
 
-function repo
-{
-	local pkg
-    local argument_input
-    pkg="$( ls /var/db/kiss/repo/core /var/db/kiss/repo/extra /var/db/kiss/repo/xorg | awk -F '/' '{print $NF'} | sort -u |
-        fzf -i \
-                    --multi \
-                    --exact \
-                    --no-sort \
-                    --select-1 \
-                    --query="$argument_input" \
-                    --cycle \
-                    --reverse \
-                    --margin="4%,1%,1%,2%" \
-                    --inline-info \
-                    --preview 'pkg-info {1} ' \
-                    --preview-window=right:55%:wrap \
-                    --header="Install from core/extra/xorg. TAB key to (un)select. ENTER to build and install. ESC to quit." \
-                    --prompt="filter> " |
-                awk '{print $1}'
-            )"
-
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
-            clear
-            kiss build $pkg && kiss i $pkg
-            fi
-
-}
-
-function community
-{
-	local pkg
-    local argument_input
-    pkg="$( ls "$community" | sort -u |
-        fzf -i \
-                    --multi \
-                    --exact \
-                    --no-sort \
-                    --select-1 \
-                    --query="$argument_input" \
-                    --cycle \
-                    --reverse \
-                    --margin="4%,1%,1%,2%" \
-                    --inline-info \
-                    --preview 'pkg-info {1} ' \
-                    --preview-window=right:55%:wrap \
-                    --header="Install from community. TAB key to (un)select. ENTER to build and install. ESC to quit." \
-                    --prompt="filter> " |
-                awk '{print $1}'
-            )"
-
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
-            clear
-            kiss build $pkg && kiss i $pkg
-            fi
-}
-
-function custom1
-{
+orphans () {
     local pkg
     local argument_input
-    pkg="$( ls "$first_custom_path" | sort -u |
-        fzf -i \
-                    --multi \
-                    --exact \
-                    --no-sort \
-                    --select-1 \
-                    --query="$argument_input" \
-                    --cycle \
-                    --reverse \
-                    --margin="4%,1%,1%,2%" \
-                    --inline-info \
-                    --preview 'pkg-info {1} ' \
-                    --preview-window=right:55%:wrap \
-                    --header="Install from "$first_custom_name". TAB key to (un)select. ENTER to build and install. ESC to quit." \
-                    --prompt="filter> " |
-                awk '{print $1}'
-            )"
-
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
-            clear
-            kiss build $pkg && kiss i $pkg
-            fi
-}
-
-function custom2
-{
-    local pkg
-    local argument_input
-    pkg="$( ls "$second_custom_path" | sort -u |
-        fzf -i \
-                    --multi \
-                    --exact \
-                    --no-sort \
-                    --select-1 \
-                    --query="$argument_input" \
-                    --cycle \
-                    --reverse \
-                    --margin="4%,1%,1%,2%" \
-                    --inline-info \
-                    --preview 'pkg-info {1} ' \
-                    --preview-window=right:55%:wrap \
-                    --header="Install from "$second_custom_name". TAB key to (un)select. ENTER to build and install. ESC to quit." \
-                    --prompt="filter> " |
-                awk '{print $1}'
-            )"
-
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
-            clear
-            kiss build $pkg && kiss i $pkg
-            fi
-}
-
-function custom3
-{
-    local pkg
-    local argument_input
-    pkg="$( ls "$third_custom_path" | sort -u |
-        fzf -i \
-                    --multi \
-                    --exact \
-                    --no-sort \
-                    --select-1 \
-                    --query="$argument_input" \
-                    --cycle \
-                    --reverse \
-                    --margin="4%,1%,1%,2%" \
-                    --inline-info \
-                    --preview 'pkg-info {1} ' \
-                    --preview-window=right:55%:wrap \
-                    --header="Install from "$third_custom_name". TAB key to (un)select. ENTER to build and install. ESC to quit." \
-                    --prompt="filter> " |
-                awk '{print $1}'
-            )"
-
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
-            clear
-            kiss build $pkg && kiss i $pkg
-            fi
-}
-
-function custom4
-{
-    local pkg
-    local argument_input
-    pkg="$( ls "$fourth_custom_path" | sort -u |
-        fzf -i \
-                    --multi \
-                    --exact \
-                    --no-sort \
-                    --select-1 \
-                    --query="$argument_input" \
-                    --cycle \
-                    --reverse \
-                    --margin="4%,1%,1%,2%" \
-                    --inline-info \
-                    --preview 'pkg-info {1} ' \
-                    --preview-window=right:55%:wrap \
-                    --header="Install from "$fourth_custom_name". TAB key to (un)select. ENTER to build and install. ESC to quit." \
-                    --prompt="filter> " |
-                awk '{print $1}'
-            )"
-
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
-            clear
-            kiss build $pkg && kiss i $pkg
-            fi
-}
-
-function orphans
-{
-	local pkg
-    local argument_input
-    pkg="$( kiss-orphans | sort -u |
+    pkg="$(kiss-orphans | sort -u |
         fzf -i \
                     --multi \
                     --exact \
@@ -256,117 +54,130 @@ function orphans
                     --inline-info \
                     --preview 'pkg-info {1} '\
                     --preview-window=right:55%:wrap \
-                    --header="TAB key to (un)select. ENTER to remove orphans. ESC to quit." \
+                    --header="TAB to (un)select. ENTER to remove orphans. ESC to quit." \
                     --prompt="filter> " |
-                awk '{print $1}'
-            )"
+                awk '{ print $1 }'
+        )"
 
-            pkg="$( echo "$pkg" | paste -sd " " )"
-            if [[ -n "$pkg" ]]
-            then
+        pkg="$(echo "$pkg" | paste -sd " ")"
+
+        if [ -n "$pkg" ]; then
             clear
-            kiss remove $pkg
-            fi
-	}
+            kiss remove "$pkg"
+        fi
+}
 
+repo() {
+    if [ "$1" = list ]; then
+        count=3
+        for repo in $(echo "$KISS_PATH" | tr ":" "\n"); do
+            count=$((count = count + 1))
+            echo "  $count: $repo"
+            export "repo_$count"="$repo"
+        done
 
+    else
+        local pkg
+        local argument_input
+        repo="$(eval printf '%s' "\${repo_${1}}")"
 
-function ui
-{
-while true
-do
-clear
-echo
-    echo -e "      __   _                       _  "
-    echo -e "     / /__(_)_________      __  __(_) "
-    echo -e "    / //_/ / ___/ ___/_____/ / / / /  "
-    echo -e "   / ,< / (__  |__  )_____/ /_/ / /   "
-    echo -e "  /_/|_/_/____/____/      \__,_/_/    "
-    echo                              
-    echo -e "  \e[7m     $(kiss list | wc -l) packages installed    \e[0m "
+        if ! [ -d "$repo" ]; then
+            return
+        fi
+
+        pkg="$(ls "$repo" | sort -u |
+            fzf -i \
+                        --multi \
+                        --exact \
+                        --no-sort \
+                        --select-1 \
+                        --query="$argument_input" \
+                        --cycle \
+                        --reverse \
+                        --margin="4%,1%,1%,2%" \
+                        --inline-info \
+                        --preview 'pkg-info {1} ' \
+                        --preview-window=right:55%:wrap \
+                        --header="(Repo: $(echo "$repo" |  awk -F "/" '{ print $NF }')) TAB to (un)select. ENTER to build and install. ESC to quit." \
+                        --prompt="filter> " |
+                    awk '{ print $1 }'
+                )"
+
+                pkg="$(echo "$pkg" | paste -sd " ")"
+
+                if [ -n "$pkg" ]; then
+                    clear
+                    kiss build "$pkg" && kiss i "$pkg"
+                fi
+
+    fi
+}
+
+ui () {
+while true; do
+    clear
     echo
-    echo -e "  1 update "
-    echo -e "  2 check orphans "
-    echo -e "  3 rebuild+list"
-    echo
-    echo -e "  4 repo "
-    echo -e "  5 community "
-    echo -e "  6 "$first_custom_name" "
-    echo -e "  7 "$second_custom_name" "
-    echo -e "  8 "$third_custom_name" "
-    echo -e "  9 "$fourth_custom_name" "
-    echo
-    read -r choice
-    choice="$(echo "$choice" | tr '[:upper:]' '[:lower:]' )"
-    echo
-    case "$choice" in
-        1|update )
-            update                                                                 
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            # wait for input, e.g. by pressing ENTER:
-            read
-            ;;
-        2|orphans )
-            orphans
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        3|rebuild )
-            rebuild
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        4|repo )
-            repo
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        5|community )
-            community
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        6|custom1 )
-            custom1
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        7|custom2 )
-            custom2
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        8|custom3 )
-            custom3
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        9|custom4 )
-            custom4
-            echo
-            echo -e " \e[41m Press ENTER to continue \e[0m"
-            read
-            ;;
-        0|q|quit|$'\e'|$'\e'$'\e' )
-        clear && exit
-            ;;
-            
-            * )                                                                         
-            echo -e " \e[41m Wrong option \e[0m"
-            echo -e "  Please try again...  "
-            sleep 2
-            ;;
-            
-      esac   
-      done
-	}
-	
+        echo -e "      __   _                       _  "
+        echo -e "     / /__(_)_________      __  __(_) "
+        echo -e "    / //_/ / ___/ ___/_____/ / / / /  "
+        echo -e "   / ,< / (__  |__  )_____/ /_/ / /   "
+        echo -e "  /_/|_/_/____/____/      \__,_/_/    "
+        echo                              
+        echo -e "  \e[7m     $(kiss list | wc -l) packages installed    \e[0m "
+        echo
+        echo -e "  1: Update"
+        echo -e "  2: Check orphans"
+        echo -e "  3: Rebuild + list"
+        echo
+        echo -e "  (Repos)"
+        repo list
+        echo
+        read -r choice
+        choice="$(echo "$choice" | tr '[:upper:]' '[:lower:]')"
+        echo
+        case "$choice" in
+            1|update)
+                update
+                echo
+                echo -e " \e[41m Press ENTER to continue \e[0m"
+                read
+                ;;
+
+            2|orphans)
+                orphans
+                echo
+                echo -e " \e[41m Press ENTER to continue \e[0m"
+                read
+                ;;
+
+            3|rebuild)
+                rebuild
+                echo
+                echo -e " \e[41m Press ENTER to continue \e[0m"
+                read
+                ;;
+
+            0|q|quit|$'\e'|$'\e'$'\e')
+                clear && exit
+                ;;
+
+            *)
+                case "$choice" in
+                    *[!0-9]*|'')
+                        echo -e " \e[41m Wrong option \e[0m"
+                        echo -e "  Please try again..."
+                        ;;
+
+                    *)
+                        repo "$choice"
+                        echo
+                        echo -e " \e[41m Press ENTER to continue \e[0m"
+                        read
+                        ;;
+                esac
+
+          esac
+          done
+}
+
 ui

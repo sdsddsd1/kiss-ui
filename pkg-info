@@ -3,59 +3,64 @@
 version=$(kiss s "$1" | head -n 1)
 available=$(kiss s "$1" | sed '/installed/d')
 
-# Display version of pkg.
-echo -e "\033[1m"$1" $(cat "$version"/version):\033[0m"
+# Display version of pkg
+echo -e "\033[1m$1 $(cat "$version"/version):\033[0m"
 
-# Download pkg-infos.
+# Download pkg-infos
 curl -s https://repology.org/project/"$1"/information | \
-#Grep some lines.
-grep -A 10 -i Summarie | \
-# Delete unwanted lines.
-	sed '/<\/section>/d' | \
-	sed '/Maintainers/d' | \
-	sed '/maintainer/d' | \
-	sed '/32-bit/d' | \
-	sed '/Debug/d' | \
-	sed '/debug/d' | \
-	sed '/completion/d' | \
-	sed '/documentation/d' | \
-	sed '/git/d' | \
-	sed '/development/d' | \
-	sed '/Development/d' | \
-	sed '/<ul>/d' | \
-	sed '/<\/ul>/d' | \
-	sed '/Summaries/d' | \
-# Delete unwanted empty lines
-	sed '/^$/d' |
-# Shuffle those lines.
-	shuf -n 1 | \
-# Delete unwanted little things.
-	sed 's/(32 bits)//g' | \
-	sed 's/(mingw-w64)//g' | \
-	sed 's/(source)//g' | \
-	sed 's/&#39;ed//g' | \
-	sed 's/&#39;s//g' | \
-	sed 's/&#39;//g' | \
-	sed 's/ls&#39;//g' | \
-	sed 's/<li>\|<\/li>\|<b>(.*)<\/b>//g' | \
-	sed 's/^[ \t]*//;s/[ \t]*$//'
+    # Grep some lines
+    grep -A 10 -i Summarie | \
+    # Delete unwanted lines
+    sed '/<\/section>/d' | \
+    sed '/Maintainers/d' | \
+    sed '/maintainer/d' | \
+    sed '/32-bit/d' | \
+    sed '/Debug/d' | \
+    sed '/debug/d' | \
+    sed '/completion/d' | \
+    sed '/documentation/d' | \
+    sed '/git/d' | \
+    sed '/development/d' | \
+    sed '/Development/d' | \
+    sed '/<ul>/d' | \
+    sed '/<\/ul>/d' | \
+    sed '/Summaries/d' | \
+    # Delete unwanted empty lines
+    sed '/^$/d' |
+    # Shuffle those lines
+    shuf -n 1 | \
+    # Delete unwanted little things
+    sed 's/(32 bits)//g' | \
+    sed 's/(mingw-w64)//g' | \
+    sed 's/(source)//g' | \
+    sed 's/&#39;ed//g' | \
+    sed 's/&#39;s//g' | \
+    sed 's/&#39;//g' | \
+    sed 's/ls&#39;//g' | \
+    sed 's/<li>\|<\/li>\|<b>(.*)<\/b>//g' | \
+    sed 's/^[ \t]*//;s/[ \t]*$//'
 echo
-# Display path of pkg.
+
+# Display path of pkg
 echo -e "\033[1m"kiss search":\033[0m"
 echo "$available"
 echo
-# Display maintainer of pkg.
+
+# Display maintainer of pkg
 echo -e "\033[1m"kiss-maintainer":\033[0m"
 kiss-maintainer "$1" | tail -1
 echo
-# Display size of pkg.
+
+# Display size of pkg
 echo -e "\033[1m"kiss-size":\033[0m"
 kiss-size "$1" | tail -1
 echo
-# Display revdepends of pkg.
+
+# Display revdepends of pkg
 echo -e "\033[1m"kiss-revdepends":\033[0m"
 kiss-revdepends "$1"
 echo
-#Display repo dependencie
+
+# Display repo dependencies
 echo -e "\033[1m"kiss-depends":\033[0m"
 kiss-depends "$1"
